@@ -41,14 +41,14 @@ jobs:
             VERSION="${GITHUB_REF_NAME#v}"
           else
             VERSION="$(python3 - <<'PY'
-from pathlib import Path
-import re
+            from pathlib import Path
+            import re
 
-text = Path('plugin/plugin.go').read_text()
-match = re.search(r'pluginVer\s*=\s*"([^"]+)"', text)
-print(match.group(1) if match else "")
-PY
-)"
+            text = Path('plugin/plugin.go').read_text()
+            match = re.search(r'pluginVer\s*=\s*"([^"]+)"', text)
+            print(match.group(1) if match else "")
+            PY
+            )"
           fi
 
           if [[ -z "${VERSION}" ]]; then
@@ -63,14 +63,14 @@ PY
         shell: bash
         run: |
           CODE_VERSION="$(python3 - <<'PY'
-from pathlib import Path
-import re
+          from pathlib import Path
+          import re
 
-text = Path('plugin/plugin.go').read_text()
-match = re.search(r'pluginVer\s*=\s*"([^"]+)"', text)
-print(match.group(1) if match else "")
-PY
-)"
+          text = Path('plugin/plugin.go').read_text()
+          match = re.search(r'pluginVer\s*=\s*"([^"]+)"', text)
+          print(match.group(1) if match else "")
+          PY
+          )"
           TAG_VERSION="${GITHUB_REF_NAME#v}"
           if [[ "${CODE_VERSION}" != "${TAG_VERSION}" ]]; then
             echo "pluginVer ${CODE_VERSION} does not match tag ${TAG_VERSION}" >&2
