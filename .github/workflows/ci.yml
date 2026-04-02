@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GIT_TERMINAL_PROMPT: "0"
+      GOPROXY: direct
+      GONOPROXY: github.com/kumiho-plugin/*
+      GONOSUMDB: github.com/kumiho-plugin/*
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Run tests
+        run: go test ./...
+
+      - name: Verify build
+        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build ./...
