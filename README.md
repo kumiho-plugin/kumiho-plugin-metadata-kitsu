@@ -41,8 +41,10 @@ This repository ships releases through GitHub Actions.
 
 Published asset names follow this pattern:
 
+- `manifest.json`
 - `kumiho-plugin-metadata-kitsu_v0.1.0_linux_amd64`
 - `kumiho-plugin-metadata-kitsu_v0.1.0_linux_arm64`
 - `checksums.txt`
 
 The release workflow also verifies that the Git tag version matches `plugin/plugin.go`.
+`manifest.json` is generated from the plugin's runtime manifest and uploaded alongside the binaries.
