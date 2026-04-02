@@ -40,15 +40,7 @@ jobs:
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             VERSION="${GITHUB_REF_NAME#v}"
           else
-            VERSION="$(python3 - <<'PY'
-            from pathlib import Path
-            import re
-
-            text = Path('plugin/plugin.go').read_text()
-            match = re.search(r'pluginVer\s*=\s*"([^"]+)"', text)
-            print(match.group(1) if match else "")
-            PY
-            )"
+            VERSION="$(python3 -c 'from pathlib import Path; import re; text = Path(\"plugin/plugin.go\").read_text(); match = re.search(r\"pluginVer\\s*=\\s*\\\"([^\\\"]+)\\\"\", text); print(match.group(1) if match else \"\")')"
           fi
 
           if [[ -z "${VERSION}" ]]; then
@@ -62,15 +54,7 @@ jobs:
         if: github.ref_type == 'tag'
         shell: bash
         run: |
-          CODE_VERSION="$(python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          text = Path('plugin/plugin.go').read_text()
-          match = re.search(r'pluginVer\s*=\s*"([^"]+)"', text)
-          print(match.group(1) if match else "")
-          PY
-          )"
+          CODE_VERSION="$(python3 -c 'from pathlib import Path; import re; text = Path(\"plugin/plugin.go\").read_text(); match = re.search(r\"pluginVer\\s*=\\s*\\\"([^\\\"]+)\\\"\", text); print(match.group(1) if match else \"\")')"
           TAG_VERSION="${GITHUB_REF_NAME#v}"
           if [[ "${CODE_VERSION}" != "${TAG_VERSION}" ]]; then
             echo "pluginVer ${CODE_VERSION} does not match tag ${TAG_VERSION}" >&2
